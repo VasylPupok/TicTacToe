@@ -6,6 +6,14 @@ void getGridCoordinates(BoardObject* target, int x, int y, int* row, int* col) {
 		*col = -1;
 		return;
 	}
+
+	int board_x = target->_boardSprite->_spriteFrame.x;
+	int board_y = target->_boardSprite->_spriteFrame.y;
+	int board_w = target->_boardSprite->_spriteFrame.w;
+	int board_h = target->_boardSprite->_spriteFrame.h;
+
+	*col = (int)((x - board_x) * 3.0f / board_w);
+	*row = (int)((y - board_x) * 3.0f / board_h);
 }
 
 // rendering board

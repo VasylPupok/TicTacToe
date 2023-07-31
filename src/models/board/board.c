@@ -5,31 +5,36 @@
 Board createBoard() {
     Board board;
     memset(&board, 0, sizeof(Board));
-    board._turn = FIRST_PLAYER;
+    board._turn = BOARD_FIRST_PLAYER;
+    board._movesMade = 0;
     return board;
 }
 
 void move(int row, int col, Board* board) {
-    if (board->_turn == FIRST_PLAYER) {
+    if (row < 0 || row > 2 || col < 0 || col > 2) return;
+
+    if (board->_turn == BOARD_FIRST_PLAYER) {
         board->_grid[row][col] = 1;
-        board->_turn = SECOND_PLAYER;
-    } else if (board->_turn = SECOND_PLAYER) {
+        board->_turn = BOARD_SECOND_PLAYER;
+        ++board->_movesMade;
+    } else if (board->_turn = BOARD_SECOND_PLAYER) {
         board->_grid[row][col] = -1;
-        board->_turn = FIRST_PLAYER;
+        board->_turn = BOARD_FIRST_PLAYER;
+        ++board->_movesMade;
     }
     // intentionally do nothing if board has wrong value of _turn
 }
 
-int findWinner(Board* board) {
+int findWinner(const Board* board) {
     // checking diagonals
     int diagonals[2] = { 
         board->_grid[0][0] + board->_grid[1][1] + board->_grid[2][2],
         board->_grid[2][0] + board->_grid[1][1] + board->_grid[0][2]
     };
-    if (diagonals[0] == 2 || diagonals[1] == 2) {
-        return FIRST_PLAYER;
-    } else if (diagonals[0] == -2 || diagonals[1] == -2) {
-        return SECOND_PLAYER;
+    if (diagonals[0] == 3 || diagonals[1] == 3) {
+        return BOARD_FIRST_PLAYER;
+    } else if (diagonals[0] == -3 || diagonals[1] == -3) {
+        return BOARD_SECOND_PLAYER;
     }
 
     // checking rows and cols
@@ -45,12 +50,16 @@ int findWinner(Board* board) {
     }
 
     for (int i = 0; i < 3; ++i) {
-        if (rowSums[i] == 2 || colSums[i] == 2) {
-            return FIRST_PLAYER;
-        } else if (rowSums[i] == -2 || colSums[i] == -2) {
-            return SECOND_PLAYER;
+        if (rowSums[i] == 3 || colSums[i] == 3) {
+            return BOARD_FIRST_PLAYER;
+        } else if (rowSums[i] == -3 || colSums[i] == -3) {
+            return BOARD_SECOND_PLAYER;
         }
     }
 
-    return 0;
+    return BOARD_NONE;
+}
+
+int gameIsEnded(const Board* board) {
+    return board->_movesMade == 9 || findWinner(board) != BOARD_NONE;
 }

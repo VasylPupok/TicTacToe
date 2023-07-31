@@ -33,6 +33,9 @@
     <ClCompile Include="src\objects\board\board_object.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\app\mouse\mouse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\util\debug\sdl_debug.h">
@@ -51,6 +54,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\objects\board\board_object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\mouse\mouse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

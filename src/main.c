@@ -29,16 +29,34 @@ int main(int argc, char** argv) {
 	short gameIsRunning = 1;
 	SDL_Event event;
 
+	int x;
+	int y;
+	int row;
+	int col;
+
 	while (gameIsRunning) {
 		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_QUIT) {
+			switch (event.type) {
+			case SDL_QUIT:
 				gameIsRunning = 0;
+			case SDL_MOUSEBUTTONUP:
+				SDL_GetMouseState(&x, &y);
+				getGridCoordinates(&board, x, y, &row, &col);
+				move(row, col, board._model);
+			default:
+				break;
 			}
 		}
 
 		clearScreen(&app);	
 		renderBoard(&app, &board);
 		display(&app);
+
+		if (gameIsEnded(board._model)) {
+			// TODO add win screen
+			SDL_Delay(3000);
+			gameIsRunning = 0;
+		}
 	}
 
 	cleanUpApp(&app);

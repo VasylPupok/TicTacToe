@@ -22,7 +22,7 @@ void renderSprite(App* target, Sprite* sprite) {
 	int err = SDL_RenderCopy(
 		target->_renderer,
 		sprite->_texture,
-		&sprite->_spriteFrame,
+		&sprite->_textureFrame,
 		&sprite->_spriteFrame
 	);
 	SDL_ASSERT(!err, "error rendering sprite");

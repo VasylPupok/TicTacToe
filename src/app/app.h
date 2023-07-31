@@ -11,6 +11,7 @@ typedef struct {
 App createApp(int width, int height, const char* title);
 
 inline void cleanUpApp(App* target) { SDL_DestroyWindow(target->_window); }
+
 void renderSprite(App* target, Sprite* sprite);
 inline void display(App* target) { SDL_RenderPresent(target->_renderer); }
 inline void clearScreen(App* target) { SDL_RenderClear(target->_renderer); };

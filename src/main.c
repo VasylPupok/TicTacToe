@@ -4,16 +4,27 @@
 #include <util/debug/sdl_debug.h>
 #include <graphics/texture/texture.h>
 #include <app/app.h>
+#include <objects/board/board_object.h>
+
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 800
 
 int main(int argc, char** argv) {
 	SDL_ASSERT(!SDL_Init(SDL_INIT_VIDEO), "video initialization failed");
 	SDL_ASSERT(IMG_Init(IMG_INIT_PNG), "image initialization failed");
 
-	App app = createApp(1280, 840, "TicTacToe");
-	SDL_Texture* texture = loadTexture(&app, "res/textures/ground_grass_1.png");
+	App app = createApp(WINDOW_WIDTH, WINDOW_HEIGHT, "TicTacToe");
+	SDL_Texture* boardTexture = loadTexture(&app, "res/textures/board.jpg");
+	SDL_Texture* crossTexture = loadTexture(&app, "res/textures/cross.jpg");
+	SDL_Texture* naughtTexture = loadTexture(&app, "res/textures/naught.jpg");
 
-	SDL_Rect spriteFrame = { 0, 0, 64, 64 };
-	Sprite test = createSprite(&spriteFrame, texture);
+	SDL_Rect spriteFrame = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
+
+	Sprite boardSprite = createSprite(&spriteFrame, boardTexture);
+
+	Board board_model = createBoard();
+
+	BoardObject board = {&boardSprite, crossTexture, naughtTexture, &board_model};
 
 	short gameIsRunning = 1;
 	SDL_Event event;
@@ -25,8 +36,8 @@ int main(int argc, char** argv) {
 			}
 		}
 
-		clearScreen(&app);
-		renderSprite(&app, &test);
+		clearScreen(&app);	
+		renderBoard(&app, &board);
 		display(&app);
 	}
 

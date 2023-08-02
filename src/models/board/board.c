@@ -1,31 +1,37 @@
 #include "board.h"
 
+#include <SDL.h>
 #include <string.h>
 
-Board createBoard() {
-    Board board;
-    memset(&board, 0, sizeof(Board));
-    board._turn = BOARD_FIRST_PLAYER;
-    board._movesMade = 0;
+Board* Board_new() {
+    Board* board = malloc(sizeof(Board));
+    SDL_assert_paranoid(board);
+
+    memset(board, 0, sizeof(Board));
+    board->_turn = BOARD_FIRST_PLAYER;
     return board;
 }
 
-void move(int row, int col, Board* board) {
+void Board_delete(Board* target) {
+    free(target);
+}
+
+void Board_move(int row, int col, Board* board) {
     if (row < 0 || row > 2 || col < 0 || col > 2) return;
 
     if (board->_turn == BOARD_FIRST_PLAYER) {
-        board->_grid[row][col] = 1;
+        board->_grid[row][col] = BOARD_FIRST_PLAYER;
         board->_turn = BOARD_SECOND_PLAYER;
         ++board->_movesMade;
-    } else if (board->_turn = BOARD_SECOND_PLAYER) {
-        board->_grid[row][col] = -1;
+    } else if (board->_turn == BOARD_SECOND_PLAYER) {
+        board->_grid[row][col] = BOARD_SECOND_PLAYER;
         board->_turn = BOARD_FIRST_PLAYER;
         ++board->_movesMade;
     }
     // intentionally do nothing if board has wrong value of _turn
 }
 
-int findWinner(const Board* board) {
+int Board_findWinner(const Board* board) {
     // checking diagonals
     int diagonals[2] = { 
         board->_grid[0][0] + board->_grid[1][1] + board->_grid[2][2],
@@ -60,6 +66,6 @@ int findWinner(const Board* board) {
     return BOARD_NONE;
 }
 
-int gameIsEnded(const Board* board) {
-    return board->_movesMade == 9 || findWinner(board) != BOARD_NONE;
+int Board_gameIsEnded(const Board* board) {
+    return board->_movesMade == 9 || Board_findWinner(board) != BOARD_NONE;
 }

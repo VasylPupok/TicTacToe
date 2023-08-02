@@ -8,10 +8,14 @@ typedef struct {
 	SDL_Renderer* _renderer;
 } App;
 
-App createApp(int width, int height, const char* title);
+App* App_new(int width, int height, const char* title);
 
-inline void cleanUpApp(App* target) { SDL_DestroyWindow(target->_window); }
+inline void App_delete(App* target) {
+	SDL_DestroyWindow(target->_window);
+	SDL_DestroyRenderer(target->_renderer);
+	free(target);
+}
 
-void renderSprite(App* target, Sprite* sprite);
-inline void display(App* target) { SDL_RenderPresent(target->_renderer); }
-inline void clearScreen(App* target) { SDL_RenderClear(target->_renderer); };
+void App_renderSprite(App* target, Sprite* sprite);
+inline void App_display(App* target) { SDL_RenderPresent(target->_renderer); }
+inline void App_clearScreen(App* target) { SDL_RenderClear(target->_renderer); };

@@ -11,8 +11,6 @@ typedef struct {
 	Board* _model;
 } BoardObject;
 
-//void createBoardObject(SDL_Texture* emptyCell);
+void BoardObject_getGridCoordinates(BoardObject* target, int x, int y, int* row, int* col);
 
-void getGridCoordinates(BoardObject* target, int x, int y, int* row, int* col);
-
-void renderBoard(App* target, BoardObject* board);
+void BoardObject_render(App* target, BoardObject* board);

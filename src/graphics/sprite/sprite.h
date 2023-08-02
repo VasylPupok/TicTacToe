@@ -9,6 +9,10 @@ typedef struct {
 	SDL_Texture* _texture;
 } Sprite;
 
-Sprite createSprite(const SDL_Rect* spriteFrame, SDL_Texture* tex);
+Sprite* Sprite_new(const SDL_Rect* spriteFrame, SDL_Texture* tex);
 
-bool containsPoint(const Sprite* sprite, int x, int y);
+inline void Sprite_delete(Sprite* target) {
+	free(target);
+}
+
+bool Sprite_containsPoint(const Sprite* sprite, int x, int y);

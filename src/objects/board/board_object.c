@@ -1,7 +1,7 @@
 #include "board_object.h"
 
-void getGridCoordinates(BoardObject* target, int x, int y, int* row, int* col) {
-	if (!containsPoint(target->_boardSprite, x, y)) {
+void BoardObject_getGridCoordinates(BoardObject* target, int x, int y, int* row, int* col) {
+	if (!Sprite_containsPoint(target->_boardSprite, x, y)) {
 		*row = -1;
 		*col = -1;
 		return;
@@ -19,22 +19,16 @@ void getGridCoordinates(BoardObject* target, int x, int y, int* row, int* col) {
 // rendering board
 
 void renderSymbol(App* target, BoardObject* board, int row, int col) {
-	//if (row < 0 || row > 2 || col < 0 || col > 2) {
-	//	return;
-	//}
-
-	
-	if (board->_model->_grid[row][col] == 0) { return; } // OK
-
-	//char** grid = board->_model->_grid;
-	//if (grid[row][col] == 0) { return; } // NOT OK
+	if (board->_model->_grid[row][col] == 0) { return; }
 
 	// TODO figure out how to calculate this values only once
+	int board_x = board->_boardSprite->_spriteFrame.x;
+	int board_y = board->_boardSprite->_spriteFrame.y;
 	int cell_width = board->_boardSprite->_spriteFrame.w / 3;
 	int cell_height = board->_boardSprite->_spriteFrame.h / 3;
 
 	SDL_Rect symbolRect = {
-		cell_width * col, cell_height * row,
+		board_x + cell_width * col, board_y + cell_height * row,
 		cell_width, cell_height
 	};
 	SDL_Texture* symbolTex = 
@@ -42,13 +36,13 @@ void renderSymbol(App* target, BoardObject* board, int row, int col) {
 		board->_crossTexture : 
 		board->_naughtTexture;
 	
-	Sprite symbolSprite = createSprite(&symbolRect, symbolTex);
-	renderSprite(target, &symbolSprite);
+	Sprite* symbolSprite = Sprite_new(&symbolRect, symbolTex);
+	App_renderSprite(target, symbolSprite);
 
 }
 
-void renderBoard(App* target, BoardObject* board) {
-	renderSprite(target, board->_boardSprite);
+void BoardObject_render(App* target, BoardObject* board) {
+	App_renderSprite(target, board->_boardSprite);
 	for (int row = 0; row < 3; ++row) {
 		for (int col = 0; col < 3; ++col) {
 			renderSymbol(target, board, row, col);

@@ -1,29 +1,33 @@
-#include <util/debug/sdl_debug.h>
 #include "app.h"
 
-App createApp(int width, int height, const char* title) {
-	App app = { NULL, NULL };
+App* App_new(int width, int height, const char* title) {
+	App* app = malloc(sizeof(App));
+	SDL_assert_paranoid(app);
 
-	app._window = SDL_CreateWindow(
-		title,
-		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+	app->_window = NULL;
+	app->_renderer = NULL;
+
+	SDL_CreateWindowAndRenderer(
 		width, height,
-		SDL_WINDOW_SHOWN
+		SDL_WINDOW_SHOWN,
+		&app->_window,
+		&app->_renderer
 	);
-	SDL_ASSERT(app._window, "error loading window");
 
-	app._renderer = SDL_CreateRenderer(app._window, -1, SDL_RENDERER_ACCELERATED);
-	SDL_ASSERT(app._renderer, "error loading renderer");
+	SDL_assert(app->_window);
+	SDL_assert(app->_renderer);
+
+	SDL_SetWindowTitle(app->_window, title);
 
 	return app;
 }
 
-void renderSprite(App* target, Sprite* sprite) {
+void App_renderSprite(App* target, Sprite* sprite) {
 	int err = SDL_RenderCopy(
 		target->_renderer,
 		sprite->_texture,
 		&sprite->_textureFrame,
 		&sprite->_spriteFrame
 	);
-	SDL_ASSERT(!err, "error rendering sprite");
+	SDL_assert(!err);
 }

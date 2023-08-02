@@ -1,17 +1,20 @@
 #pragma once
 
-#define BOARD_FIRST_PLAYER 1
-#define BOARD_SECOND_PLAYER -1
-#define BOARD_NONE 0
+typedef enum {
+	BOARD_SECOND_PLAYER = -1,
+	BOARD_NONE = 0,
+	BOARD_FIRST_PLAYER = 1
+} BoardPlayer;
 
 typedef struct {
-	unsigned char _grid[3][3];
-	unsigned char _turn;
-	unsigned char _movesMade;
+	char _grid[3][3];
+	char _turn;
+	int _movesMade;
 } Board;
 
-Board createBoard();
+Board* Board_new();
+void Board_delete(Board* target);
 
-void move(int row, int col, Board* board);
-int findWinner(const Board* board);
-int gameIsEnded(const Board* board);
+void Board_move(int row, int col, Board* board);
+BoardPlayer Board_findWinner(const Board* board);
+int Board_gameIsEnded(const Board* board);
